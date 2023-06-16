@@ -27,7 +27,14 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-CSRF_TRUSTED_ORIGINS = ['https://web-production-07f6.up.railway.app']
+
+CSRF_TRUSTED_ORIGINS=[
+    "https://web-production-07f6.up.railway.app",
+]
+CORS_ALLOWED_ORIGINS = [
+    "https://web-production-07f6.up.railway.app",
+    # Add other allowed origins here if needed
+]
 # Application definition
 
 INSTALLED_APPS = [
@@ -126,7 +133,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 STATIC_HOST = "https://web-production-07f6.up.railway.app/" if not DEBUG else ""
 STATIC_URL = STATIC_HOST + "/static/"
-STATIC_URL = '/static/'
+STATIC_URL = 'static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 VENV_PATH = os.path.dirname(BASE_DIR)
 STATIC_ROOT =os.path.join(BASE_DIR, 'staticfiles')
