@@ -131,14 +131,28 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
-STATIC_HOST = "https://web-production-07f6.up.railway.app/" if not DEBUG else ""
-# STATIC_URL = STATIC_HOST + "/static/"
-STATIC_URL = '/staticfiles'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-VENV_PATH = os.path.dirname(BASE_DIR)
-STATIC_ROOT =os.path.join(BASE_DIR, 'staticfiles')
+# STATIC_HOST = "https://web-production-07f6.up.railway.app/" if not DEBUG else ""
+# # STATIC_URL = STATIC_HOST + "/static/"
+# STATIC_URL = '/staticfiles'
+# STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+# VENV_PATH = os.path.dirname(BASE_DIR)
+# STATIC_ROOT =os.path.join(BASE_DIR, 'staticfiles')
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_REDIRECT_URL = 'home'
+
+STATIC_HOST = "https://web-production-07f6.up.railway.app/" if not DEBUG else ""
+STATIC_URL = STATIC_HOST + "/static/"
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+VENV_PATH = os.path.dirname(BASE_DIR)
+# STATIC_ROOT = '/home/eihy0p9s0spe/public_html/rba/rbastatic'
+# STATIC_ROOT = '/rbastatic/'
+
+STATIC_ROOT =os.path.join(BASE_DIR, 'staticfiles')
+
+
+
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
