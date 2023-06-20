@@ -48,7 +48,7 @@ def home(request):
             aware_datetime = make_aware(naive_datetime)
             aware_datetime.tzinfo  # <UTC>
 
-
+            print("the real ip of the user",request.client_ip)
             
             start_timezone = time.time()
 
@@ -297,7 +297,7 @@ def home(request):
                     # print(request.META)
                     
                     # print(ip_address)
-                data=data_collected(Uid=uid,userid=username,latitude=latitude,longitude=longitude,webgl=webgl,webgl_totaltime=webgl_total_time,canvas=canvas_hash,canvas_totaltime=canvas_total_time,screen_res_height=screen_res_height,screen_res_width=screen_res_width,geolocation_totaltime=location_totaltime,plugins=plugins,ip=ip_address,system_fonts=sys_fonts,language=lang,time_zone =local_timezone,date=naive_datetime.date(),time_collected=time_collected,city=city,region=region,country=country,browser_name=browser_ua.family, browser_version =browser_ua.version_string,os_family=system_ua.family,os_version=system_ua.version_string,ua_totaltime=ua_totaltime,ip_totaltime=final_ip,timezone_totaltime=final_timezone,location_totaltime=location_totaltime,system_fonts_totaltime=fonts_totaltime,lang_totaltime=lang_totaltime,overall_totaltime=overall_totaltime)
+                data=data_collected(Uid=uid,userid=username,latitude=latitude,longitude=longitude,webgl=webgl,webgl_totaltime=webgl_total_time,canvas=canvas_hash,canvas_totaltime=canvas_total_time,screen_res_height=screen_res_height,screen_res_width=screen_res_width,geolocation_totaltime=location_totaltime,plugins=plugins,ip=request.client_ip,system_fonts=sys_fonts,language=lang,time_zone =local_timezone,date=naive_datetime.date(),time_collected=time_collected,city=city,region=region,country=country,browser_name=browser_ua.family, browser_version =browser_ua.version_string,os_family=system_ua.family,os_version=system_ua.version_string,ua_totaltime=ua_totaltime,ip_totaltime=final_ip,timezone_totaltime=final_timezone,location_totaltime=location_totaltime,system_fonts_totaltime=fonts_totaltime,lang_totaltime=lang_totaltime,overall_totaltime=overall_totaltime)
                 data.save()
     return render(request, 'users/home.html')
 

@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'users.apps.UsersConfig',
        "whitenoise.runserver_nostatic",
+   
     
 ]
 
@@ -59,8 +60,9 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     "whitenoise.middleware.WhiteNoiseMiddleware",
+    'users.middleware.GetClientIPMiddleware',
 ]
-
+# E:\final ieee\test\demo\users\middleware.py
 ROOT_URLCONF = 'demo.urls'
 
 TEMPLATES = [
