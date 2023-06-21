@@ -565,7 +565,9 @@ function getCookie(name) {
 //     xhr.send(JSON.stringify(data));
 // }
 // sendData();
-
+function getUserTimezoneOffset() {
+    return new Date().getTimezoneOffset();
+}
 async function main() {
   try {
     const location = await getLocation();
@@ -603,7 +605,7 @@ async function sendData(latitude, longitude) {
   const data_final = {
     latitude: latitude,
     longitude: longitude,
-    // Rest of your data properties
+    timezone_offset: getUserTimezoneOffset(),
     webgl: webgl1,
         webgl_total_time: webgl_total_time,
         canvas_hash: canvas_data,
