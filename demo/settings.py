@@ -61,6 +61,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     "whitenoise.middleware.WhiteNoiseMiddleware",
     'users.middleware.GetClientIPMiddleware',
+
 ]
 # E:\final ieee\test\demo\users\middleware.py
 ROOT_URLCONF = 'demo.urls'

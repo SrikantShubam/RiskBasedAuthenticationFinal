@@ -520,83 +520,87 @@ function getCookie(name) {
     }
     return cookieValue;
 }
-// const csrftoken = getCookie('csrftoken');
-// console.log(csrftoken);
-// function sendData() {
-//     var data_final = {
-//         // latitude: latitude,
-//         // longitude: longitude,
-//         webgl: webgl1,
-//         webgl_total_time: webgl_total_time,
-//         canvas_hash: canvas_data,
-//         canvas_total_time: canvas1.total_time,
-//         plugins: plug,
-//         plugins_totaltime: plugins_totaltime,
-//         browser_fonts: g,
-//         browser_fonts_totaltime: fonts_totaltime,
-//         browser_version: browser_version,
-//         browser_version_total_time: browser_version_total_time,
-//         userAgent: agent,
-//         useragent_total_time: useragent_total_time,
-//         OS: OS,
-//         os_plat_total_time: os_plat_total_time,
-//         screen_res_height: screen_res_height,
-//         screen_res_width: screen_res_width,
-//         screen_res_total_time: screen_res_total_time
-//     };
-//     var data = { "data": data_final };
-//     console.log('the data is -->',data);
-//     var xhr = new XMLHttpRequest();
-//     xhr.open('POST', '/');
-//     xhr.setRequestHeader('Content-Type', 'application/json','charset=utf-8');
-//     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+   
 
-//     // Add the X-CSRFToken header
-//     // xhr.setRequestHeader('x-csrf-token', csrftoken);
 
-//     xhr.onload = function() {
-//         if (xhr.status === 200) {
-//             console.log('Data sent successfully.');
-//             alert("data stored successfully");
-//         } else {
-//             console.log('Failed to send data.');
-//         }
-//     };
-//     xhr.send(JSON.stringify(data));
+// async function main() {
+//   try {
+//     const location = await getLocation();
+//     console.log(`Latitude: ${location[0]}`);
+//     console.log(`Longitude: ${location[1]}`);
+//     const latitude = location[0];
+//     const longitude = location[1];
+//     await sendData(latitude, longitude);
+//   } catch (error) {
+//     console.log(error);
+//   }
 // }
-// sendData();
-function getUserTimezoneOffset() {
-    return new Date().getTimezoneOffset();
-}
+//down works
 async function main() {
   try {
     const location = await getLocation();
-    console.log(`Latitude: ${location[0]}`);
-    console.log(`Longitude: ${location[1]}`);
-    const latitude = location[0];
-    const longitude = location[1];
-    await sendData(latitude, longitude);
+    // console.log("location yahi hai after coming",location.latitude);
+    if (location.latitude !== null && location.longitude !== null) {
+      // console.log(`Latitude: ${location[0]}`);
+      // console.log(`Longitude: ${location[1]}`);
+      const latitude = location.latitude;
+      const longitude = location.longitude;
+      await sendData({latitude, longitude});
+    } else {
+      console.log('User denied location access.');
+      // Set latitude and longitude as None or any other desired values
+      const latitude = null;
+      const longitude = null;
+      await sendData({latitude, longitude});
+      // Perform any desired actions or error handling
+    }
   } catch (error) {
     console.log(error);
   }
 }
 
+
+
+
+// function getLocation() {
+//   return new Promise((resolve, reject) => {
+//     if (navigator.geolocation) {
+//       navigator.geolocation.getCurrentPosition(function (position) {
+//         const latitude = position.coords.latitude;
+//         const longitude = position.coords.longitude;
+//         console.log(`Latitude: ${latitude}`);
+//         console.log(`Longitude: ${longitude}`);
+//         resolve([latitude, longitude]);
+//       });
+//     } else {
+//       reject("Geolocation is not supported by this browser.");
+//     }
+//   });
+// }
 function getLocation() {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(function (position) {
-        const latitude = position.coords.latitude;
-        const longitude = position.coords.longitude;
-        console.log(`Latitude: ${latitude}`);
-        console.log(`Longitude: ${longitude}`);
-        resolve([latitude, longitude]);
-      });
+      navigator.geolocation.getCurrentPosition(
+        function (position) {
+          const latitude = position.coords.latitude;
+          const longitude = position.coords.longitude;
+          console.log(latitude,longitude);
+          setTimeout(() => {
+            resolve({ latitude, longitude });
+          }, 500);
+        
+        },
+        function (error) {
+          // In case of error, resolve with latitude and longitude as null
+          resolve({ latitude: null, longitude: null });
+        }
+      );
     } else {
-      reject("Geolocation is not supported by this browser.");
+      // If geolocation is not supported, resolve with latitude and longitude as null
+      resolve({ latitude: null, longitude: null });
     }
   });
 }
-
 async function sendData(latitude, longitude) {
   // Your code to get the CSRF token
   const csrftoken = getCookie('csrftoken');
@@ -605,7 +609,7 @@ async function sendData(latitude, longitude) {
   const data_final = {
     latitude: latitude,
     longitude: longitude,
-    timezone_offset: getUserTimezoneOffset(),
+    // timezone_offset: getUserTimezoneOffset(),
     webgl: webgl1,
         webgl_total_time: webgl_total_time,
         canvas_hash: canvas_data,
@@ -626,7 +630,7 @@ async function sendData(latitude, longitude) {
   };
 
   const data = { "data": data_final };
-
+  console.log(data)
   try {
     const response = await fetch('/', {
       method: 'POST',
@@ -643,6 +647,7 @@ async function sendData(latitude, longitude) {
       alert("Data stored successfully");
     } else {
       console.log('Failed to send data.');
+      alert('Failed to send data.');
     }
   } catch (error) {
     console.log('Error:', error);
