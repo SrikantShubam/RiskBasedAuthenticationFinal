@@ -126,24 +126,24 @@ def home(request):
               
             import os  #for windows
         
-            systemfonts_start=time.time()
-            from sys import platform
-            sys_fonts=[]
-            if platform == "win32":
-                sys_font=os.listdir((r'C:\Windows\fonts'))
-                sys_fonts=list(set(sys_font))
-                # print("system fonts are ",sys_fonts)
-            elif platform =="macOS":
-                import pycocoa #for mac
-                manager = pycocoa.NSFontManager.sharedFontManager()
-                font_families = list(manager.availableFontFamilies())
-                print(font_families)
+            # systemfonts_start=time.time()
+            # from sys import platform
+            # sys_fonts=[]
+            # if platform == "win32":
+            #     sys_font=os.listdir((r'C:\Windows\fonts'))
+            #     sys_fonts=list(set(sys_font))
+            #     # print("system fonts are ",sys_fonts)
+            # elif platform =="macOS":
+            #     import pycocoa #for mac
+            #     manager = pycocoa.NSFontManager.sharedFontManager()
+            #     font_families = list(manager.availableFontFamilies())
+            #     print(font_families)
             
-            else:
-                print("system fonts are not available")
+            # else:
+            #     print("system fonts are not available")
 
-            systemfonts_final=time.time()
-            fonts_totaltime=systemfonts_final-systemfonts_start
+            # systemfonts_final=time.time()
+            # fonts_totaltime=systemfonts_final-systemfonts_start
 
             #system fonts end ---------------------
 
@@ -267,6 +267,7 @@ def home(request):
                 # locay=str(city+region+country+"from geoapify"
                 if latitude is  None and longitude is  None:
                     url="https://ipinfo.io/{0}?token={1}".format(request.client_ip,token) 
+                    # url="https://ipinfo.io/{0}?token={1}".format("34.82.78.16",token) 
                     print(url)
                     res=requests.get(url).json()
                     print(res)
@@ -293,8 +294,9 @@ def home(request):
                 # csrf_token = csrf.get_token(request)
                     # print(request.META)
                 browser_final=str(browser_ua.family)+str(browser_ua.version_string)
+                OS=str(system_ua.family)+str(system_ua.version_string)
                     # print(ip_address)
-                data=data_collected(Uid=uid,userid=username,latlong=lat_long,browser=browser_final,location=location_final,latitude=latitude,longitude=longitude,webgl=webgl,webgl_totaltime=webgl_total_time,canvas=canvas_hash,canvas_totaltime=canvas_total_time,screen_res_height=screen_res_height,screen_res_width=screen_res_width,geolocation_totaltime=location_totaltime,plugins=plugins,ip=request.client_ip,system_fonts=sys_fonts,language=lang,date=naive_datetime.date(),time_collected=time_collected,city=city,region=region,country=country,browser_name=browser_ua.family,time_zone=time_zone, browser_version =browser_ua.version_string,os_family=system_ua.family,os_version=system_ua.version_string,ua_totaltime=ua_totaltime,ip_totaltime=final_ip,timezone_totaltime=final_timezone,location_totaltime=location_totaltime,system_fonts_totaltime=fonts_totaltime,lang_totaltime=lang_totaltime,overall_totaltime=overall_totaltime)
+                data=data_collected(Uid=uid,Os=OS,userid=username,latlong=lat_long,browser=browser_final,location=location_final,latitude=latitude,longitude=longitude,webgl=webgl,canvas=canvas_hash,screen_res_height=screen_res_height,screen_res_width=screen_res_width,plugins=plugins,ip=request.client_ip,language=lang,date=naive_datetime.date(),time_collected=time_collected,city=city,region=region,country=country,browser_name=browser_ua.family,time_zone=time_zone, browser_version =browser_ua.version_string,os_family=system_ua.family,os_version=system_ua.version_string,overall_totaltime=overall_totaltime)
                 data.save()
     return render(request, 'users/home.html')
 
