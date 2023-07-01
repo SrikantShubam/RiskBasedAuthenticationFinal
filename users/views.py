@@ -265,7 +265,7 @@ def home(request):
                     location_totaltime=location_end-location_start
                 # locay=str(city+region+country+"from geoapify"
                 if latitude is  None and longitude is  None:
-                    url="https://ipinfo.io/{0}?token={1}".format("182.69.242.105",token) 
+                    url="https://ipinfo.io/{0}?token={1}".format(request.client_ip,token) 
                     print(url)
                     res=requests.get(url).json()
                     print(res)
