@@ -259,6 +259,7 @@ def home(request):
                     # print(city)
                     country=res['results'][0]['country']
                     region=res['results'][0]['state']
+                    location_final = str(res['results'][0]['country'])+str(res['results'][0]['state'])+str(res['results'][0]['city'])
                     time_zone = res.get('results', [{}])[0].get('timezone', {}).get('name')
                     lat_long=str(latitude)+":"+str(longitude)
                     location_end=time.time()
@@ -273,6 +274,7 @@ def home(request):
                     region = res['region']
                     country = res['country']
                     lat_long = res['loc']
+                    location_final=str(res['country'])+str(res['region'])+str(res['city'])
                     time_zone = res['timezone']
                     location_totaltime=0 
                     # "ip": ip_address,
@@ -292,7 +294,7 @@ def home(request):
                     # print(request.META)
                     
                     # print(ip_address)
-                data=data_collected(Uid=uid,userid=username,latlong=lat_long,latitude=latitude,longitude=longitude,webgl=webgl,webgl_totaltime=webgl_total_time,canvas=canvas_hash,canvas_totaltime=canvas_total_time,screen_res_height=screen_res_height,screen_res_width=screen_res_width,geolocation_totaltime=location_totaltime,plugins=plugins,ip=request.client_ip,system_fonts=sys_fonts,language=lang,date=naive_datetime.date(),time_collected=time_collected,city=city,region=region,country=country,browser_name=browser_ua.family,time_zone=time_zone, browser_version =browser_ua.version_string,os_family=system_ua.family,os_version=system_ua.version_string,ua_totaltime=ua_totaltime,ip_totaltime=final_ip,timezone_totaltime=final_timezone,location_totaltime=location_totaltime,system_fonts_totaltime=fonts_totaltime,lang_totaltime=lang_totaltime,overall_totaltime=overall_totaltime)
+                data=data_collected(Uid=uid,userid=username,latlong=lat_long,location=location_final,latitude=latitude,longitude=longitude,webgl=webgl,webgl_totaltime=webgl_total_time,canvas=canvas_hash,canvas_totaltime=canvas_total_time,screen_res_height=screen_res_height,screen_res_width=screen_res_width,geolocation_totaltime=location_totaltime,plugins=plugins,ip=request.client_ip,system_fonts=sys_fonts,language=lang,date=naive_datetime.date(),time_collected=time_collected,city=city,region=region,country=country,browser_name=browser_ua.family,time_zone=time_zone, browser_version =browser_ua.version_string,os_family=system_ua.family,os_version=system_ua.version_string,ua_totaltime=ua_totaltime,ip_totaltime=final_ip,timezone_totaltime=final_timezone,location_totaltime=location_totaltime,system_fonts_totaltime=fonts_totaltime,lang_totaltime=lang_totaltime,overall_totaltime=overall_totaltime)
                 data.save()
     return render(request, 'users/home.html')
 
