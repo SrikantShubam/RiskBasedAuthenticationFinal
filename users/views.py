@@ -2,6 +2,7 @@ import dotenv
 dotenv.load_dotenv()
 import os
 API_KEY = os.environ.get('API_KEY')
+token=os.environ.get('token')
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from django.contrib import messages
@@ -259,33 +260,28 @@ def home(request):
                     country=res['results'][0]['country']
                     region=res['results'][0]['state']
                     time_zone = res.get('results', [{}])[0].get('timezone', {}).get('name')
-                    
+                    lat_long=str(latitude)+":"+str(longitude)
                     location_end=time.time()
                     location_totaltime=location_end-location_start
                 # locay=str(city+region+country+"from geoapify"
                 if latitude is  None and longitude is  None:
-                    location_start=time.time()
-                    print("using api data cloud")
-                    data=requests.get("https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=&longitude").json()
-                    latitude=data.get('latitude')
-                    longitude=data.get("longitude")
-                    city=data.get('city')
-                    country=data.get('countryName')
-                    region=data.get('principalSubdivision')
-                    
-                    for item in data.get('localityInfo', {}).get('informative', []):
-                        if 'name' in item and item.get('description') == 'time zone':
-                            time_zone = item['name']
-                            break
-                    print(time_zone)    
+                    url="https://ipinfo.io/{0}?token={1}".format("182.69.242.105",token) 
+                    print(url)
+                    res=requests.get(url).json()
+                    print(res)
+                    city = res['city']
+                    region = res['region']
+                    country = res['country']
+                    lat_long = res['loc']
+                    time_zone = res['timezone']
+                    location_totaltime=0 
                     # "ip": ip_address,
                     # city= response.get("city")
                     
                     
                     # country= response.get("country_name")
                     # print(data)
-                    location_end=time.time()
-                    location_totaltime=location_end-location_start
+                   
                 else:
                     location_totaltime=0    
                     #location end-------------------------
@@ -296,7 +292,7 @@ def home(request):
                     # print(request.META)
                     
                     # print(ip_address)
-                data=data_collected(Uid=uid,userid=username,latitude=latitude,longitude=longitude,webgl=webgl,webgl_totaltime=webgl_total_time,canvas=canvas_hash,canvas_totaltime=canvas_total_time,screen_res_height=screen_res_height,screen_res_width=screen_res_width,geolocation_totaltime=location_totaltime,plugins=plugins,ip=request.client_ip,system_fonts=sys_fonts,language=lang,date=naive_datetime.date(),time_collected=time_collected,city=city,region=region,country=country,browser_name=browser_ua.family,time_zone=time_zone, browser_version =browser_ua.version_string,os_family=system_ua.family,os_version=system_ua.version_string,ua_totaltime=ua_totaltime,ip_totaltime=final_ip,timezone_totaltime=final_timezone,location_totaltime=location_totaltime,system_fonts_totaltime=fonts_totaltime,lang_totaltime=lang_totaltime,overall_totaltime=overall_totaltime)
+                data=data_collected(Uid=uid,userid=username,latlong=lat_long,latitude=latitude,longitude=longitude,webgl=webgl,webgl_totaltime=webgl_total_time,canvas=canvas_hash,canvas_totaltime=canvas_total_time,screen_res_height=screen_res_height,screen_res_width=screen_res_width,geolocation_totaltime=location_totaltime,plugins=plugins,ip=request.client_ip,system_fonts=sys_fonts,language=lang,date=naive_datetime.date(),time_collected=time_collected,city=city,region=region,country=country,browser_name=browser_ua.family,time_zone=time_zone, browser_version =browser_ua.version_string,os_family=system_ua.family,os_version=system_ua.version_string,ua_totaltime=ua_totaltime,ip_totaltime=final_ip,timezone_totaltime=final_timezone,location_totaltime=location_totaltime,system_fonts_totaltime=fonts_totaltime,lang_totaltime=lang_totaltime,overall_totaltime=overall_totaltime)
                 data.save()
     return render(request, 'users/home.html')
 

@@ -46,3 +46,6 @@ class data_collected(models.Model):
     longitude = models.FloatField(default=0,blank=True,null=True)
     geolocation_totaltime=models.CharField(max_length=200,default=0,blank=True,null=True)
     overall_totaltime=models.CharField(max_length=200,default=0,blank=True,null=True)
+
+    #--- > the final list 
+    latlong = models.CharField(max_length=200,default=0,blank=True,null=True)
