@@ -50,3 +50,4 @@ class data_collected(models.Model):
     #--- > the final list 
     latlong = models.CharField(max_length=200,default=0,blank=True,null=True)
     location=models.CharField(max_length=200,default=0,blank=True,null=True)
+    browser = models.TextField(default='0', blank=True, null=True)
