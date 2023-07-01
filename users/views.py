@@ -1,6 +1,7 @@
-from dotenv import load_dotenv
-load_dotenv()
+import dotenv
+dotenv.load_dotenv()
 import os
+API_KEY = os.environ.get('API_KEY')
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from django.contrib import messages
@@ -11,18 +12,10 @@ import datetime
 from django.utils.timezone import make_aware
 import requests
 import json
-from django.utils import timezone
-from pytz import timezone
 from django.views.decorators.csrf import csrf_exempt,csrf_protect
-import asyncio
-import time
-
-
-  
- 
 @csrf_exempt
 def home(request):
-      
+  
 
     
         
@@ -138,7 +131,7 @@ def home(request):
             if platform == "win32":
                 sys_font=os.listdir((r'C:\Windows\fonts'))
                 sys_fonts=list(set(sys_font))
-                print("system fonts are ",sys_fonts)
+                # print("system fonts are ",sys_fonts)
             elif platform =="macOS":
                 import pycocoa #for mac
                 manager = pycocoa.NSFontManager.sharedFontManager()
@@ -205,9 +198,10 @@ def home(request):
             screen_res_width = ''
             # latitude=''
             if request.method == 'POST':
-                
+                latitude=None
+                longitude=None
                 data = json.loads(request.body.decode('utf-8'))
-                
+                # print(type(data),data)
                 webgl = data['data']['webgl']
                 webgl_total_time = data['data']['webgl_total_time']
                 canvas_hash = data['data']['canvas_hash']
@@ -225,14 +219,10 @@ def home(request):
                 screen_res_height = data['data']['screen_res_height']
                 screen_res_width = data['data']['screen_res_width']
                 screen_res_total_time = data['data']['screen_res_total_time']
-                lat_long=data['data']['latitude']
-                print(type(lat_long),lat_long)
-                latitude =lat_long['latitude']
-                longitude =lat_long['longitude']
-                # longitude=data['data']['longitude']
-                # timezone_offset=data['data']['timezone_offset']
-                # user_timezone = timezone('Etc/GMT{0}'.format(timezone_offset))
-
+                latitude=data['data']['latitude']['latitude']
+                longitude=data['data']['latitude']['longitude']
+                # timezone=data['data']['timezone_offset']
+                
 
                 print('webgl:', webgl)
                 print('webgl_total_time:', webgl_total_time)
@@ -254,115 +244,60 @@ def home(request):
                 print('latitude:', latitude)
                 print('longitude:', longitude)
 
-                # you can then print or use these variables as needed
-           
-            # data = print(type(request.body.decode('utf-8')))
-            # data = print("2nd hai",json.loads(request.body.decode('utf-8')))
-            # if data is not None:
-            #     print('data hai')
-            #     parsed_data = json.loads(data)
-            # # do something with the parsed data
-            # else:
-            #     print("data nahi hai")
-            #     parsed_data = json.loads(data)
-            # webgl = parsed_data['data']['webgl']
-            # print(webgl)
-            # latitude = data.get('latitude')
-            # longitude = data.get('longitude')
-            # data_final = print(data.get("data"))
-                # geo_loc_end_time=time.time()
-                # geolocation_totaltime=geo_loc_end_time-geo_loc_time
-               
-            # if latitude is not None and longitude is not None:
-            #     location_start=time.time()
-            #     url = "https://api.geoapify.com/v1/geocode/reverse?lat={0}&lon={1}&format=json&apiKey={2}".format(latitude,longitude,API_KEY)
-            #     res=requests.get(url).json()
-            #     print("using geolocay->",res)
-            #     city=res['results'][0]['city']
-            #     print(city)
-            #     country=res['results'][0]['country']
-            #     region=res['results'][0]['state']
-            #     timezone1 = res['results'][0]['timezone']['name']
-            #     print("apicloud info",timezone1)
-            #     location_end=time.time()
-            #     location_totaltime=location_end-location_start
-                  
-            # else:
-            #         location_start=time.time()
-            #         data=requests.get("https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=&longitude").json()
-            #         latitude=data.get('latitude')
-            #         longitude=data.get("longitude")
-            #         city=data.get('city')
-            #         country=data.get('countryName')
-            #         region=data.get('principalSubdivision')
-            #         timezone1 = data['localityInfo']['informative'][1]['name']
-            #         print("time zone from bigcloud",timezone1)
-            #         # "ip": ip_address,
-            #         # city= response.get("city")
+            
+                time_zone=None
+                if latitude is not None and longitude is not None:
+                    location_start=time.time()
+
+                    print("collected from getCurrentLocation",latitude,longitude)
+                    url = "https://api.geoapify.com/v1/geocode/reverse?lat={0}&lon={1}&format=json&apiKey={2}".format(latitude,longitude,API_KEY)
+                    res=requests.get(url).json()
+                    print(url)
+                    # print("using geolocay->",res)
+                    city=res['results'][0]['city']
+                    # print(city)
+                    country=res['results'][0]['country']
+                    region=res['results'][0]['state']
+                    time_zone = res.get('results', [{}])[0].get('timezone', {}).get('name')
+                    
+                    location_end=time.time()
+                    location_totaltime=location_end-location_start
+                # locay=str(city+region+country+"from geoapify"
+                if latitude is  None and longitude is  None:
+                    location_start=time.time()
+                    print("using api data cloud")
+                    data=requests.get("https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=&longitude").json()
+                    latitude=data.get('latitude')
+                    longitude=data.get("longitude")
+                    city=data.get('city')
+                    country=data.get('countryName')
+                    region=data.get('principalSubdivision')
+                    
+                    for item in data.get('localityInfo', {}).get('informative', []):
+                        if 'name' in item and item.get('description') == 'time zone':
+                            time_zone = item['name']
+                            break
+                    print(time_zone)    
+                    # "ip": ip_address,
+                    # city= response.get("city")
                     
                     
-            #         # country= response.get("country_name")
-            #         print(data)
-            #         location_end=time.time()
-            #         location_totaltime=location_end-location_start
-            #         print("collected from getCurrentLocation",latitude,longitude)
-             
+                    # country= response.get("country_name")
+                    # print(data)
+                    location_end=time.time()
+                    location_totaltime=location_end-location_start
+                else:
+                    location_totaltime=0    
+                    #location end-------------------------
                 
-            # total_end=time.time()
-            # overall_totaltime=total_end-total_start
-            # main()
+                total_end=time.time()
+                overall_totaltime=total_end-total_start
                 # csrf_token = csrf.get_token(request)
                     # print(request.META)
-            async def process_location(latitude, longitude):
-                # Process the location data
-                print(f"Latitude: {latitude}")
-                print(f"Longitude: {longitude}")
-    # Your code for processing the location goes here
-
-    async def get_location():
-        latitude = None
-        longitude = None
-        timeout = 10  # Timeout in seconds
-        start_time = time.time()
-
-        while True:
-            if latitude is not None and longitude is not None:
-                await process_location(latitude, longitude)
-                break
-
-            elapsed_time = time.time() - start_time
-            if elapsed_time >= timeout:
-                # Handle the case when data is not received within the timeout
-                print("Failed to get location data within the timeout.")
-                latitude = None  # Set latitude to None as default value
-                longitude = None  # Set longitude to None as default value
-                break
-
-            await asyncio.sleep(1)  # Delay of 1 second
-
-        return latitude, longitude
-
-    async def main():
-        total_start = time.time()
-
-        # Execute the get_location function asynchronously and retrieve the latitude and longitude
-        latitude, longitude = await get_location()
-
-        total_end = time.time()
-        overall_totaltime = total_end - total_start
-
-        print(f"Overall total time: {overall_totaltime}")
-        if latitude is not None and longitude is not None:
-            # Only process the data if latitude and longitude are available
-            # Your code for further processing goes here
-
-    # Run the main function in an event loop        
-                asyncio.run(main())
-
-        data=data_collected(Uid=uid,userid=username,latitude=latitude,longitude=longitude,webgl=webgl,webgl_totaltime=webgl_total_time,canvas=canvas_hash,canvas_totaltime=canvas_total_time,screen_res_height=screen_res_height,screen_res_width=screen_res_width,geolocation_totaltime=location_totaltime,plugins=plugins,ip=request.client_ip,system_fonts=sys_fonts,language=lang,time_zone =timezone1,date=naive_datetime.date(),time_collected=time_collected,city=city,region=region,country=country,browser_name=browser_ua.family, browser_version =browser_ua.version_string,os_family=system_ua.family,os_version=system_ua.version_string,ua_totaltime=ua_totaltime,ip_totaltime=final_ip,timezone_totaltime=final_timezone,location_totaltime=location_totaltime,system_fonts_totaltime=fonts_totaltime,lang_totaltime=lang_totaltime,overall_totaltime=overall_totaltime)
-        data.save()
+                    
                     # print(ip_address)
-    
+                data=data_collected(Uid=uid,userid=username,latitude=latitude,longitude=longitude,webgl=webgl,webgl_totaltime=webgl_total_time,canvas=canvas_hash,canvas_totaltime=canvas_total_time,screen_res_height=screen_res_height,screen_res_width=screen_res_width,geolocation_totaltime=location_totaltime,plugins=plugins,ip=request.client_ip,system_fonts=sys_fonts,language=lang,date=naive_datetime.date(),time_collected=time_collected,city=city,region=region,country=country,browser_name=browser_ua.family,time_zone=time_zone, browser_version =browser_ua.version_string,os_family=system_ua.family,os_version=system_ua.version_string,ua_totaltime=ua_totaltime,ip_totaltime=final_ip,timezone_totaltime=final_timezone,location_totaltime=location_totaltime,system_fonts_totaltime=fonts_totaltime,lang_totaltime=lang_totaltime,overall_totaltime=overall_totaltime)
+                data.save()
     return render(request, 'users/home.html')
 
 def register(request):
