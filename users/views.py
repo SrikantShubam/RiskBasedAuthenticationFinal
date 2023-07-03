@@ -117,82 +117,6 @@ def home(request):
             ua_endtime = time.time()
             ua_totaltime = ua_endtime - ua_starttime
 
-            # print("ua----------- ",ua_totaltime)
-            #browser end----------------------
-            #screen size ---------------------------
-          
-            #screen size end ---------------------------
-
-
-
-            #system fonts start ---------------------
-              
-            import os  #for windows
-        
-            # systemfonts_start=time.time()
-            # from sys import platform
-            # sys_fonts=[]
-            # if platform == "win32":
-            #     sys_font=os.listdir((r'C:\Windows\fonts'))
-            #     sys_fonts=list(set(sys_font))
-            #     # print("system fonts are ",sys_fonts)
-            # elif platform =="macOS":
-            #     import pycocoa #for mac
-            #     manager = pycocoa.NSFontManager.sharedFontManager()
-            #     font_families = list(manager.availableFontFamilies())
-            #     print(font_families)
-            
-            # else:
-            #     print("system fonts are not available")
-
-            # systemfonts_final=time.time()
-            # fonts_totaltime=systemfonts_final-systemfonts_start
-
-            #system fonts end ---------------------
-
-            
-            #browser fonts,canvas,webgl,plugins
-            # import json
-            # browser_fonts_start=time.time()
-            # f=open(r"C:\Users\Srikant Shubham\Downloads\data.json")
-            # plugins_start=time.time()
-            # g=open(r"C:\Users\Srikant Shubham\Downloads\plugins.json")
-            # h=open(r"C:\Users\Srikant Shubham\Downloads\canvas.json")
-            # i=open(r"C:\Users\Srikant Shubham\Downloads\webgl.json")
-
-
-            # browser_fonts = json.load(f)
-            # browser_fonts_end=time.time()
-            # browser_totaltime=browser_fonts_end-browser_fonts_start
-            # plugins=json.load(g)
-            # plugins_end=time.time()
-            # plugins_totaltime=plugins_end-plugins_start
-            # canvas_data=json.load(h)
-            # canvas=canvas_data["canvas"]
-            # canvas_totaltime=canvas_data["total_time"]
-        
-            
-            # webgl_data=json.load(i)
-            # webgl=webgl_data["webgl"]
-            # webgl_totaltime=webgl_data["webgl_totaltime"]
-            # print(plugins)
-            # f.close()
-            # g.close()
-            # h.close()
-            # i.close()
-            # print(canvas,webgl)
-            # os.remove(r'C:\Users\Srikant Shubham\Downloads\data.json')
-            # os.remove(r'C:\Users\Srikant Shubham\Downloads\plugins.json')
-            # os.remove(r"C:\Users\Srikant Shubham\Downloads\canvas.json")
-            # os.remove(r"C:\Users\Srikant Shubham\Downloads\webgl.json")
-            # geo_loc_time=time.time()
-            # latitude = request.POST.get('latitude')
-            # longitude = request.POST.get('longitude')
-            # # data=request.POST.get('data')
-            # # data = json.loads(request.body.decode('utf-8'))
-            # # data_final = data.get("data")
-            # # print('Data received from client:', data_final)
-            # data=print(request.body)
             webgl = ''
             canvas_hash = ''
             browser_version = ''
@@ -258,6 +182,9 @@ def home(request):
                 time_only = parsed_time.time()
                 print("Date only:", parsed_time.date())
                 print("Time only:", time_only)
+                date = datetime.datetime.strptime(str(parsed_time.date()), "%Y-%m-%d")
+                day_name = date.strftime("%A") 
+                print(day_name) 
 
             
                 time_zone=None
@@ -311,7 +238,7 @@ def home(request):
                 OS=str(system_ua.family)+str(system_ua.version_string)
                     # print(ip_address)
                 screen_size=str(screen_res_height)+":"+str(screen_res_width)
-                data=data_collected(Uid=uid,screen_size=screen_size,Os=OS,system_type=device_type_final,userid=username,latlong=lat_long,browser=browser_final,location=location_final,latitude=latitude,longitude=longitude,webgl=webgl,canvas=canvas_hash,screen_res_height=screen_res_height,screen_res_width=screen_res_width,plugins=plugins,ip=request.client_ip,language=lang,date=naive_datetime.date(),login_time=str(parsed_time.time()),start_date=str(parsed_time.date()),city=city,region=region,country=country,browser_name=browser_ua.family,time_zone=time_zone, browser_version =browser_ua.version_string,os_family=system_ua.family,os_version=system_ua.version_string,rtt=overall_totaltime)
+                data=data_collected(Uid=uid,start_week=day_name,screen_size=screen_size,Os=OS,system_type=device_type_final,userid=username,latlong=lat_long,browser=browser_final,location=location_final,latitude=latitude,longitude=longitude,webgl=webgl,canvas=canvas_hash,screen_res_height=screen_res_height,screen_res_width=screen_res_width,plugins=plugins,ip=request.client_ip,language=lang,date=naive_datetime.date(),login_time=str(parsed_time.time()),start_date=str(parsed_time.date()),city=city,region=region,country=country,browser_name=browser_ua.family,time_zone=time_zone, browser_version =browser_ua.version_string,os_family=system_ua.family,os_version=system_ua.version_string,rtt=overall_totaltime)
                 data.save()
     return render(request, 'users/home.html')
 
