@@ -238,7 +238,7 @@ def home(request):
                 OS=str(system_ua.family)+str(system_ua.version_string)
                     # print(ip_address)
                 screen_size=str(screen_res_height)+":"+str(screen_res_width)
-                data=data_collected(Uid=uid,start_week=day_name,screen_size=screen_size,Os=OS,system_type=device_type_final,userid=username,latlong=lat_long,browser=browser_final,location=location_final,latitude=latitude,longitude=longitude,webgl=webgl,canvas=canvas_hash,screen_res_height=screen_res_height,screen_res_width=screen_res_width,plugins=plugins,ip=request.client_ip,language=lang,date=naive_datetime.date(),login_time=str(parsed_time.time()),start_date=str(parsed_time.date()),city=city,region=region,country=country,browser_name=browser_ua.family,time_zone=time_zone, browser_version =browser_ua.version_string,os_family=system_ua.family,os_version=system_ua.version_string,rtt=overall_totaltime)
+                data=data_collected(Uid=uid,start_week=day_name,screen_size=screen_size,Os=OS,system_type=device_type_final,userid=username,latlong=lat_long,browser=browser_final,location=location_final,latitude=latitude,longitude=longitude,webgl=webgl,canvas=canvas_hash,ip=request.client_ip,language=lang,date=naive_datetime.date(),login_time=str(parsed_time.time()),start_date=str(parsed_time.date()),time_zone=time_zone,rtt=overall_totaltime)
                 data.save()
     return render(request, 'users/home.html')
 

@@ -30,7 +30,7 @@ class data_collected(models.Model):
    
     # screen_res_height=models.CharField(max_length=20,default=0,null=True,blank=True)
     # screen_res_width=models.CharField(max_length=20,default=0,null=True,blank=True)
-    plugins=models.CharField(max_length=200,default='Something',null=True,blank=True)
+    # plugins=models.CharField(max_length=200,default='Something',null=True,blank=True)
     canvas=models.CharField(max_length=200,default="null",null=True,blank=True)
     webgl=models.CharField(max_length=200,default="null",null=True,blank=True)
     # ua_totaltime=models.CharField(max_length=200,default=0,blank=True,null=True)
