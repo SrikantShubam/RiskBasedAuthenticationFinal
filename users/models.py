@@ -54,4 +54,4 @@ class data_collected(models.Model):
     Os=models.CharField(max_length=200,default=0,blank=True,null=True)
     system_type=models.CharField(max_length=200,default=0,blank=True,null=True)
     rtt=models.CharField(max_length=200,default=0,blank=True,null=True)
-    time_collected=models.TimeField(default=0)
+    system_time=models.TimeField(default=0)
