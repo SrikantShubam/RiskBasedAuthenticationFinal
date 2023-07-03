@@ -27,7 +27,7 @@ class data_collected(models.Model):
     browser_version = models.CharField(max_length=400,default='Something')
     os_family = models.CharField(max_length=400,default="something")
     os_version = models.CharField(max_length=400,default='Something')
-    screensize=models.CharField(max_length=20,default=0)
+   
     screen_res_height=models.CharField(max_length=20,default=0,null=True,blank=True)
     screen_res_width=models.CharField(max_length=20,default=0,null=True,blank=True)
     plugins=models.CharField(max_length=200,default='Something',null=True,blank=True)
@@ -57,5 +57,6 @@ class data_collected(models.Model):
     Os=models.CharField(max_length=200,default=0,blank=True,null=True)
     system_type=models.CharField(max_length=200,default=0,blank=True,null=True)
     rtt=models.CharField(max_length=200,default=0,blank=True,null=True)
-    system_time=models.TimeField(default=0)
+    login_time=models.TimeField(default=0)
     start_date =  models.DateField()
+    screen_size=models.CharField(max_length=20,default=0)
