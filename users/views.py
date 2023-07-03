@@ -299,7 +299,7 @@ def home(request):
                 browser_final=str(browser_ua.family)+str(browser_ua.version_string)
                 OS=str(system_ua.family)+str(system_ua.version_string)
                     # print(ip_address)
-                data=data_collected(Uid=uid,Os=OS,system_type=device_type_final,userid=username,latlong=lat_long,browser=browser_final,location=location_final,latitude=latitude,longitude=longitude,webgl=webgl,canvas=canvas_hash,screen_res_height=screen_res_height,screen_res_width=screen_res_width,plugins=plugins,ip=request.client_ip,language=lang,date=naive_datetime.date(),sytem_time=obj11.time(),city=city,region=region,country=country,browser_name=browser_ua.family,time_zone=time_zone, browser_version =browser_ua.version_string,os_family=system_ua.family,os_version=system_ua.version_string,rtt=overall_totaltime)
+                data=data_collected(Uid=uid,Os=OS,system_type=device_type_final,userid=username,latlong=lat_long,browser=browser_final,location=location_final,latitude=latitude,longitude=longitude,webgl=webgl,canvas=canvas_hash,screen_res_height=screen_res_height,screen_res_width=screen_res_width,plugins=plugins,ip=request.client_ip,language=lang,date=naive_datetime.date(),system_time=obj11.time(),city=city,region=region,country=country,browser_name=browser_ua.family,time_zone=time_zone, browser_version =browser_ua.version_string,os_family=system_ua.family,os_version=system_ua.version_string,rtt=overall_totaltime)
                 data.save()
     return render(request, 'users/home.html')
 
