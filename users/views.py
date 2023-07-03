@@ -248,8 +248,8 @@ def home(request):
                 print('screen_res_total_time:', screen_res_total_time)
                 print('latitude:', latitude)
                 print('longitude:', longitude)
-                # time_url="https://api.ipgeolocation.io/ipgeo?apiKey={0}&ip={1}".format(time_api_key,request.client_ip)
-                time_url="https://api.ipgeolocation.io/ipgeo?apiKey={0}&ip={1}".format(time_api_key,"122.180.223.178")
+                time_url="https://api.ipgeolocation.io/ipgeo?apiKey={0}&ip={1}".format(time_api_key,request.client_ip)
+                # time_url="https://api.ipgeolocation.io/ipgeo?apiKey={0}&ip={1}".format(time_api_key,"122.180.223.178")
                 res=requests.get(time_url).json()
                 print(time_url)
                 current_time = res['time_zone']['current_time']
@@ -280,8 +280,8 @@ def home(request):
                     location_totaltime=location_end-location_start
                 # locay=str(city+region+country+"from geoapify"
                 if latitude is  None and longitude is  None:
-                    # url="https://ipinfo.io/{0}?token={1}".format(request.client_ip,token) 
-                    url="https://ipinfo.io/{0}?token={1}".format("34.82.78.16",token) 
+                    url="https://ipinfo.io/{0}?token={1}".format(request.client_ip,token) 
+                    # url="https://ipinfo.io/{0}?token={1}".format("34.82.78.16",token) 
                     print(url)
                     res=requests.get(url).json()
                     print(res)
