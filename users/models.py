@@ -16,7 +16,7 @@ class data_collected(models.Model):
     language=models.CharField(max_length=40,default='en-US',null=True,blank=True)
     # system_fonts=models.CharField(max_length=10000,default='Arial',null=True,blank=True)
     # browser_fonts=models.CharField(max_length=200,default='Arial',null=True,blank=True)
-    time_collected=models.TimeField(default=0)
+    
     city=models.CharField(max_length=20,default='SOME STRING',null=True,blank=True)
     region=models.CharField(max_length=20,default='SOME STRING',null=True, blank=True)
     country=models.CharField(max_length=40,default='SOME STRING',null=True, blank=True)
@@ -45,10 +45,13 @@ class data_collected(models.Model):
     latitude = models.FloatField(default=0,blank=True,null=True)
     longitude = models.FloatField(default=0,blank=True,null=True)
     geolocation_totaltime=models.CharField(max_length=200,default=0,blank=True,null=True)
-    overall_totaltime=models.CharField(max_length=200,default=0,blank=True,null=True)
+    rtt=models.CharField(max_length=200,default=0,blank=True,null=True)
 
     #--- > the final list 
     latlong = models.CharField(max_length=200,default=0,blank=True,null=True)
     location=models.CharField(max_length=200,default=0,blank=True,null=True)
     browser = models.TextField(default='0', blank=True, null=True)
     Os=models.CharField(max_length=200,default=0,blank=True,null=True)
+    system_type=models.CharField(max_length=200,default=0,blank=True,null=True)
+    rtt=models.CharField(max_length=200,default=0,blank=True,null=True)
+    system_time=models.TimeField(default=0)

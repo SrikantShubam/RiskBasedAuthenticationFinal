@@ -577,6 +577,83 @@ async function main() {
 //     }
 //   });
 // }
+
+// --- device type   -----
+
+
+// function getDeviceType() {
+//   const screenWidth = window.screen.width;
+//   const screenHeight = window.screen.height;
+
+//   if (screenWidth >= 768 && screenHeight >= 768) {
+//     return 'Laptop/PC';
+//   } else {
+//     return 'Smartphone/Tablet';
+//   }
+// }
+
+// function checkDeviceType() {
+//   const deviceType = getDeviceType();
+
+//   if (deviceType === 'Laptop/PC') {
+//     const battery = navigator.getBatterySync();
+//     if (battery.charging && battery.chargingTime === 0) {
+//       return 'Desktop';
+//     } else {
+//       return 'Laptop';
+//     }
+//   } else {
+//     return deviceType;
+//   }
+// }
+
+// // Usage
+// device_type_final = checkDeviceType(); // Assign value to the global variable
+// console.log('Device Type:', device_type_final);
+let device_type_final; // Declare global variable
+
+function getDeviceType() {
+  const screenWidth = window.screen.width;
+  const screenHeight = window.screen.height;
+
+  if (screenWidth >= 768 && screenHeight >= 768) {
+    return 'Laptop/PC';
+  } else {
+    return 'Smartphone/Tablet';
+  }
+}
+
+async function checkDeviceType() {
+  const deviceType = getDeviceType();
+
+  if (deviceType === 'Laptop/PC') {
+    try {
+      const battery = await navigator.getBattery();
+      if (battery.charging && battery.chargingTime === 0) {
+        return 'Desktop';
+      } else {
+        return 'Laptop';
+      }
+    } catch (error) {
+      throw new Error('Error retrieving battery information');
+    }
+  } else {
+    return deviceType;
+  }
+}
+
+// Usage
+(async () => {
+  try {
+    device_type_final = await checkDeviceType(); // Assign value to the global variable
+    console.log('Device Type:', device_type_final);
+    console.log('device', device_type_final);
+  } catch (error) {
+    console.error('Error:', error);
+  }
+})();
+
+//------------------------------
 function getLocation() {
   return new Promise((resolve) => {
     if (navigator.geolocation) {
@@ -601,37 +678,125 @@ function getLocation() {
     }
   });
 }
+// async function sendData(latitude, longitude) {
+//   // Your code to get the CSRF token
+//   const csrftoken = getCookie('csrftoken');
+//   console.log(csrftoken);
+
+//   const data_final = {
+//     latitude: latitude,
+//     longitude: longitude,
+//     // timezone_offset: getUserTimezoneOffset(),
+//     webgl: webgl1,
+//         webgl_total_time: webgl_total_time,
+//         canvas_hash: canvas_data,
+//         canvas_total_time: canvas1.total_time,
+//         plugins: plug,
+//         plugins_totaltime: plugins_totaltime,
+//         browser_fonts: g,
+//         browser_fonts_totaltime: fonts_totaltime,
+//         browser_version: browser_version,
+//         browser_version_total_time: browser_version_total_time,
+//         userAgent: agent,
+//         useragent_total_time: useragent_total_time,
+//         OS: OS,
+//         os_plat_total_time: os_plat_total_time,
+//         screen_res_height: screen_res_height,
+//         screen_res_width: screen_res_width,
+//         screen_res_total_time: screen_res_total_time,
+//         device_type_final:device_type_final
+//   };
+
+//   const data = { "data": data_final };
+//   console.log(data)
+//   try {
+//     const response = await fetch('/', {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json',
+//         'X-Requested-With': 'XMLHttpRequest',
+//         'x-csrf-token': csrftoken
+//       },
+//       body: JSON.stringify(data)
+//     });
+
+//     if (response.ok) {
+//       console.log('Data sent successfully.');
+//       alert("Data stored successfully");
+//     } else {
+//       console.log('Failed to send data.');
+//       alert('Failed to send data.');
+//     }
+//   } catch (error) {
+//     console.log('Error:', error);
+//   }
+// }
 async function sendData(latitude, longitude) {
-  // Your code to get the CSRF token
   const csrftoken = getCookie('csrftoken');
   console.log(csrftoken);
 
-  const data_final = {
-    latitude: latitude,
-    longitude: longitude,
-    // timezone_offset: getUserTimezoneOffset(),
-    webgl: webgl1,
-        webgl_total_time: webgl_total_time,
-        canvas_hash: canvas_data,
-        canvas_total_time: canvas1.total_time,
-        plugins: plug,
-        plugins_totaltime: plugins_totaltime,
-        browser_fonts: g,
-        browser_fonts_totaltime: fonts_totaltime,
-        browser_version: browser_version,
-        browser_version_total_time: browser_version_total_time,
-        userAgent: agent,
-        useragent_total_time: useragent_total_time,
-        OS: OS,
-        os_plat_total_time: os_plat_total_time,
-        screen_res_height: screen_res_height,
-        screen_res_width: screen_res_width,
-        screen_res_total_time: screen_res_total_time
-  };
+  let device_type_final; // Declare global variable
 
-  const data = { "data": data_final };
-  console.log(data)
+  function getDeviceType() {
+    const screenWidth = window.screen.width;
+    const screenHeight = window.screen.height;
+
+    if (screenWidth >= 768 && screenHeight >= 768) {
+      return 'Laptop/PC';
+    } else {
+      return 'Smartphone/Tablet';
+    }
+  }
+
+  async function checkDeviceType() {
+    const deviceType = getDeviceType();
+
+    if (deviceType === 'Laptop/PC') {
+      try {
+        const battery = await navigator.getBattery();
+        if (battery.charging && battery.chargingTime === 0) {
+          return 'Desktop';
+        } else {
+          return 'Laptop';
+        }
+      } catch (error) {
+        throw new Error('Error retrieving battery information');
+      }
+    } else {
+      return deviceType;
+    }
+  }
+
   try {
+    device_type_final = await checkDeviceType(); // Assign value to the global variable
+
+    const data_final = {
+      latitude: latitude,
+      longitude: longitude,
+      // timezone_offset: getUserTimezoneOffset(),
+      webgl: webgl1,
+      webgl_total_time: webgl_total_time,
+      canvas_hash: canvas_data,
+      canvas_total_time: canvas1.total_time,
+      plugins: plug,
+      plugins_totaltime: plugins_totaltime,
+      browser_fonts: g,
+      browser_fonts_totaltime: fonts_totaltime,
+      browser_version: browser_version,
+      browser_version_total_time: browser_version_total_time,
+      userAgent: agent,
+      useragent_total_time: useragent_total_time,
+      OS: OS,
+      os_plat_total_time: os_plat_total_time,
+      screen_res_height: screen_res_height,
+      screen_res_width: screen_res_width,
+      screen_res_total_time: screen_res_total_time,
+      device_type_final: device_type_final
+    };
+
+    const data = { "data": data_final };
+    console.log(data);
+
     const response = await fetch('/', {
       method: 'POST',
       headers: {
