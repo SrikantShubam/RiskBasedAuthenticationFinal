@@ -148,8 +148,8 @@ def home(request):
                 screen_res_width = data['data']['screen_res_width']
                 screen_res_total_time = data['data']['screen_res_total_time']
                 device_type_final = data['data']['device_type_final']
-                latitude=data['data']['latitude']['latitude']
-                longitude=data['data']['latitude']['longitude']
+                latitude=data['data']['latitude']
+                longitude=data['data']['longitude']
                 # timezone=data['data']['timezone_offset']
                 
                 print("device_type_final",device_type_final)
@@ -207,8 +207,8 @@ def home(request):
                     location_totaltime=location_end-location_start
                 # locay=str(city+region+country+"from geoapify"
                 if latitude is  None and longitude is  None:
-                    url="https://ipinfo.io/{0}?token={1}".format(request.client_ip,token) 
-                    # url="https://ipinfo.io/{0}?token={1}".format("34.82.78.16",token) 
+                    # url="https://ipinfo.io/{0}?token={1}".format(request.client_ip,token) 
+                    url="https://ipinfo.io/{0}?token={1}".format("34.82.78.16",token) 
                     print(url)
                     res=requests.get(url).json()
                     print(res)
@@ -237,8 +237,9 @@ def home(request):
                 browser_final=str(browser_ua.family)+str(browser_ua.version_string)
                 OS=str(system_ua.family)+str(system_ua.version_string)
                     # print(ip_address)
+                login_status='NFE'
                 screen_size=str(screen_res_height)+":"+str(screen_res_width)
-                data=data_collected(Uid=uid,start_week=day_name,screen_size=screen_size,Os=OS,system_type=device_type_final,userid=username,latlong=lat_long,browser=browser_final,location=location_final,latitude=latitude,longitude=longitude,webgl=webgl,canvas=canvas_hash,ip=request.client_ip,language=lang,date=naive_datetime.date(),login_time=str(parsed_time.time()),start_date=str(parsed_time.date()),time_zone=time_zone,rtt=overall_totaltime)
+                data=data_collected(Uid=uid,login_status=login_status,start_week=day_name,screen_size=screen_size,Os=OS,system_type=device_type_final,userid=username,latlong=lat_long,browser=browser_final,location=location_final,latitude=latitude,longitude=longitude,webgl=webgl,canvas=canvas_hash,ip=request.client_ip,language=lang,date=naive_datetime.date(),login_time=str(parsed_time.time()),start_date=str(parsed_time.date()),time_zone=time_zone,rtt=overall_totaltime)
                 data.save()
     return render(request, 'users/home.html')
 

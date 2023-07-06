@@ -61,3 +61,4 @@ class data_collected(models.Model):
     start_date =  models.DateField()
     screen_size=models.CharField(max_length=20,default=0)
     start_week=models.CharField(max_length=200,default=0,blank=True,null=True)
+    login_status=models.CharField(max_length=200,default='E',blank=True,null=True)

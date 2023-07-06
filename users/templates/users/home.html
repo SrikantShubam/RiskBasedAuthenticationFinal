@@ -535,51 +535,34 @@ function getCookie(name) {
 //     console.log(error);
 //   }
 // }
-//down works
-async function main() {
-  try {
-    const location = await getLocation();
-    // console.log("location yahi hai after coming",location.latitude);
-    if (location.latitude !== null && location.longitude !== null) {
-      // console.log(`Latitude: ${location[0]}`);
-      // console.log(`Longitude: ${location[1]}`);
-      const latitude = location.latitude;
-      const longitude = location.longitude;
-      await sendData({latitude, longitude});
-    } else {
-      console.log('User denied location access.');
-      // Set latitude and longitude as None or any other desired values
-      const latitude = null;
-      const longitude = null;
-      await sendData({latitude, longitude});
-      // Perform any desired actions or error handling
-    }
-  } catch (error) {
-    console.log(error);
-  }
-}
-
-
-
-
-// function getLocation() {
-//   return new Promise((resolve, reject) => {
-//     if (navigator.geolocation) {
-//       navigator.geolocation.getCurrentPosition(function (position) {
-//         const latitude = position.coords.latitude;
-//         const longitude = position.coords.longitude;
-//         console.log(`Latitude: ${latitude}`);
-//         console.log(`Longitude: ${longitude}`);
-//         resolve([latitude, longitude]);
-//       });
+// ---------------------down works
+// async function main() {
+//   try {
+//     const location = await getLocation();
+//     // console.log("location yahi hai after coming",location.latitude);
+//     if (location.latitude !== null && location.longitude !== null) {
+//       // console.log(`Latitude: ${location[0]}`);
+//       // console.log(`Longitude: ${location[1]}`);
+//       const latitude = location.latitude;
+//       const longitude = location.longitude;
+//       await sendData({latitude, longitude});
 //     } else {
-//       reject("Geolocation is not supported by this browser.");
+//       console.log('User denied location access.');
+//       // Set latitude and longitude as None or any other desired values
+//       const latitude = null;
+//       const longitude = null;
+//       await sendData({latitude, longitude});
+//       // Perform any desired actions or error handling
 //     }
-//   });
+//   } catch (error) {
+//     console.log(error);
+//   }
 // }
 
-// --- device type   -----
 
+
+
+// let device_type_final; // Declare global variable
 
 // function getDeviceType() {
 //   const screenWidth = window.screen.width;
@@ -592,15 +575,19 @@ async function main() {
 //   }
 // }
 
-// function checkDeviceType() {
+// async function checkDeviceType() {
 //   const deviceType = getDeviceType();
 
 //   if (deviceType === 'Laptop/PC') {
-//     const battery = navigator.getBatterySync();
-//     if (battery.charging && battery.chargingTime === 0) {
-//       return 'Desktop';
-//     } else {
-//       return 'Laptop';
+//     try {
+//       const battery = await navigator.getBattery();
+//       if (battery.charging && battery.chargingTime === 0) {
+//         return 'Desktop';
+//       } else {
+//         return 'Laptop';
+//       }
+//     } catch (error) {
+//       throw new Error('Error retrieving battery information');
 //     }
 //   } else {
 //     return deviceType;
@@ -608,76 +595,42 @@ async function main() {
 // }
 
 // // Usage
-// device_type_final = checkDeviceType(); // Assign value to the global variable
-// console.log('Device Type:', device_type_final);
-let device_type_final; // Declare global variable
+// (async () => {
+//   try {
+//     device_type_final = await checkDeviceType(); // Assign value to the global variable
+//     console.log('Device Type:', device_type_final);
+//     console.log('device', device_type_final);
+//   } catch (error) {
+//     console.error('Error:', error);
+//   }
+// })();
 
-function getDeviceType() {
-  const screenWidth = window.screen.width;
-  const screenHeight = window.screen.height;
-
-  if (screenWidth >= 768 && screenHeight >= 768) {
-    return 'Laptop/PC';
-  } else {
-    return 'Smartphone/Tablet';
-  }
-}
-
-async function checkDeviceType() {
-  const deviceType = getDeviceType();
-
-  if (deviceType === 'Laptop/PC') {
-    try {
-      const battery = await navigator.getBattery();
-      if (battery.charging && battery.chargingTime === 0) {
-        return 'Desktop';
-      } else {
-        return 'Laptop';
-      }
-    } catch (error) {
-      throw new Error('Error retrieving battery information');
-    }
-  } else {
-    return deviceType;
-  }
-}
-
-// Usage
-(async () => {
-  try {
-    device_type_final = await checkDeviceType(); // Assign value to the global variable
-    console.log('Device Type:', device_type_final);
-    console.log('device', device_type_final);
-  } catch (error) {
-    console.error('Error:', error);
-  }
-})();
-
-//------------------------------
-function getLocation() {
-  return new Promise((resolve) => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        function (position) {
-          const latitude = position.coords.latitude;
-          const longitude = position.coords.longitude;
-          console.log(latitude,longitude);
-          setTimeout(() => {
-            resolve({ latitude, longitude });
-          }, 500);
+// //------------------------------
+// function getLocation() {
+//   return new Promise((resolve) => {
+//     if (navigator.geolocation) {
+//       navigator.geolocation.getCurrentPosition(
+//         function (position) {
+//           const latitude = position.coords.latitude;
+//           const longitude = position.coords.longitude;
+//           console.log(latitude,longitude);
+//           setTimeout(() => {
+//             resolve({ latitude, longitude });
+//           }, 500);
         
-        },
-        function (error) {
-          // In case of error, resolve with latitude and longitude as null
-          resolve({ latitude: null, longitude: null });
-        }
-      );
-    } else {
-      // If geolocation is not supported, resolve with latitude and longitude as null
-      resolve({ latitude: null, longitude: null });
-    }
-  });
-}
+//         },
+//         function (error) {
+//           // In case of error, resolve with latitude and longitude as null
+//           resolve({ latitude: null, longitude: null });
+//         }
+//       );
+//     } else {
+//       // If geolocation is not supported, resolve with latitude and longitude as null
+//       resolve({ latitude: null, longitude: null });
+//     }
+//   });
+// }
+
 // async function sendData(latitude, longitude) {
 //   // Your code to get the CSRF token
 //   const csrftoken = getCookie('csrftoken');
@@ -731,24 +684,55 @@ function getLocation() {
 //     console.log('Error:', error);
 //   }
 // }
-async function sendData(latitude, longitude) {
-  const csrftoken = getCookie('csrftoken');
-  console.log(csrftoken);
+// main();
 
-  let device_type_final; // Declare global variable
+///  uppar wale makes all run except firefox
 
-  function getDeviceType() {
-    const screenWidth = window.screen.width;
-    const screenHeight = window.screen.height;
 
-    if (screenWidth >= 768 && screenHeight >= 768) {
-      return 'Laptop/PC';
+async function main() {
+  try {
+    const location = await getLocation();
+    if (location.latitude !== null && location.longitude !== null) {
+      const latitude = location.latitude;
+      const longitude = location.longitude;
+      await sendData(latitude, longitude);
     } else {
-      return 'Smartphone/Tablet';
+      console.log('User denied location access.');
+      // Set latitude and longitude as None or any other desired values
+      const latitude = null;
+      const longitude = null;
+      await sendData(latitude, longitude);
+      // Perform any desired actions or error handling
     }
+  } catch (error) {
+    console.log(error);
   }
+}
 
-  async function checkDeviceType() {
+let device_type_final; // Declare global variable
+
+function getDeviceType() {
+  const screenWidth = window.screen.width;
+  const screenHeight = window.screen.height;
+
+  if (screenWidth >= 768 && screenHeight >= 768) {
+    return 'Laptop/PC';
+  } else {
+    return 'Smartphone/Tablet';
+  }
+}
+
+async function checkDeviceType() {
+  const browserName = (function (agent) {
+    switch (true) {
+      case agent.indexOf("firefox") > -1: return "Mozilla Firefox";
+      default: return "other";
+    }
+  })(window.navigator.userAgent.toLowerCase());
+
+  if (browserName === 'Mozilla Firefox') {
+    return getDeviceType();
+  } else {
     const deviceType = getDeviceType();
 
     if (deviceType === 'Laptop/PC') {
@@ -766,37 +750,76 @@ async function sendData(latitude, longitude) {
       return deviceType;
     }
   }
+}
 
+(async () => {
   try {
     device_type_final = await checkDeviceType(); // Assign value to the global variable
+    console.log('Device Type:', device_type_final);
+    main();
+  } catch (error) {
+    console.error('Error:', error);
+  }
+})();
 
-    const data_final = {
-      latitude: latitude,
-      longitude: longitude,
-      // timezone_offset: getUserTimezoneOffset(),
-      webgl: webgl1,
-      webgl_total_time: webgl_total_time,
-      canvas_hash: canvas_data,
-      canvas_total_time: canvas1.total_time,
-      plugins: plug,
-      plugins_totaltime: plugins_totaltime,
-      browser_fonts: g,
-      browser_fonts_totaltime: fonts_totaltime,
-      browser_version: browser_version,
-      browser_version_total_time: browser_version_total_time,
-      userAgent: agent,
-      useragent_total_time: useragent_total_time,
-      OS: OS,
-      os_plat_total_time: os_plat_total_time,
-      screen_res_height: screen_res_height,
-      screen_res_width: screen_res_width,
-      screen_res_total_time: screen_res_total_time,
-      device_type_final: device_type_final
-    };
+// Rest of the code remains unchanged
+function getLocation() {
+  return new Promise((resolve) => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        function (position) {
+          const latitude = position.coords.latitude;
+          const longitude = position.coords.longitude;
+          console.log(latitude,longitude);
+          setTimeout(() => {
+            resolve({ latitude, longitude });
+          }, 500);
+        
+        },
+        function (error) {
+          // In case of error, resolve with latitude and longitude as null
+          resolve({ latitude: null, longitude: null });
+        }
+      );
+    } else {
+      // If geolocation is not supported, resolve with latitude and longitude as null
+      resolve({ latitude: null, longitude: null });
+    }
+  });
+}
 
-    const data = { "data": data_final };
-    console.log(data);
+async function sendData(latitude, longitude) {
+  // Your code to get the CSRF token
+  const csrftoken = getCookie('csrftoken');
+  console.log(csrftoken);
 
+  const data_final = {
+    latitude: latitude,
+    longitude: longitude,
+    // timezone_offset: getUserTimezoneOffset(),
+    webgl: webgl1,
+        webgl_total_time: webgl_total_time,
+        canvas_hash: canvas_data,
+        canvas_total_time: canvas1.total_time,
+        plugins: plug,
+        plugins_totaltime: plugins_totaltime,
+        browser_fonts: g,
+        browser_fonts_totaltime: fonts_totaltime,
+        browser_version: browser_version,
+        browser_version_total_time: browser_version_total_time,
+        userAgent: agent,
+        useragent_total_time: useragent_total_time,
+        OS: OS,
+        os_plat_total_time: os_plat_total_time,
+        screen_res_height: screen_res_height,
+        screen_res_width: screen_res_width,
+        screen_res_total_time: screen_res_total_time,
+        device_type_final:device_type_final
+  };
+
+  const data = { "data": data_final };
+  console.log(data)
+  try {
     const response = await fetch('/', {
       method: 'POST',
       headers: {
@@ -818,7 +841,6 @@ async function sendData(latitude, longitude) {
     console.log('Error:', error);
   }
 }
-
 main();
 
 </script>
