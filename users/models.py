@@ -10,10 +10,7 @@ from django.utils import timezone
 class data_collected(models.Model):
     Uid=models.CharField(max_length=400,default="Id not given")
     userid=models.CharField(max_length=400,null=True,blank=True,default="something")
-    ip=models.CharField(max_length=40,null=True,blank=True,default="something")
-    date=models.DateField()
-    time_zone=models.CharField(max_length=40,default='UTC',null=True,blank=True)
-    language=models.CharField(max_length=40,default='en-US',null=True,blank=True)
+
     # system_fonts=models.CharField(max_length=10000,default='Arial',null=True,blank=True)
     # browser_fonts=models.CharField(max_length=200,default='Arial',null=True,blank=True)
     
@@ -48,6 +45,10 @@ class data_collected(models.Model):
     rtt=models.CharField(max_length=200,default=0,blank=True,null=True)
 
     #--- > the final list 
+    ip=models.CharField(max_length=40,null=True,blank=True,default="something")
+  
+    time_zone=models.CharField(max_length=40,default='UTC',null=True,blank=True)
+    language=models.CharField(max_length=40,default='en-US',null=True,blank=True)
     latlong = models.CharField(max_length=200,default=0,blank=True,null=True)
     location=models.CharField(max_length=200,default=0,blank=True,null=True)
     browser = models.TextField(default='0', blank=True, null=True)
@@ -60,5 +61,5 @@ class data_collected(models.Model):
     start_week=models.CharField(max_length=200,default=0,blank=True,null=True)
     login_status=models.CharField(max_length=200,default='E',blank=True,null=True)
     login_count=models.IntegerField()
-    prev_date =  models.DateField()
+    prev_date=models.DateField()
 

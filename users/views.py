@@ -191,8 +191,8 @@ def home(request):
                 print('screen_res_total_time:', screen_res_total_time)
                 print('latitude:', latitude)
                 print('longitude:', longitude)
-                # time_url="https://api.ipgeolocation.io/ipgeo?apiKey={0}&ip={1}".format(time_api_key,request.client_ip)
-                time_url="https://api.ipgeolocation.io/ipgeo?apiKey={0}&ip={1}".format(time_api_key,"122.180.223.178")
+                time_url="https://api.ipgeolocation.io/ipgeo?apiKey={0}&ip={1}".format(time_api_key,request.client_ip)
+                # time_url="https://api.ipgeolocation.io/ipgeo?apiKey={0}&ip={1}".format(time_api_key,"122.180.223.178")
                 res=requests.get(time_url).json()
                 print(time_url)
                 current_time = res['time_zone']['current_time']
@@ -226,8 +226,8 @@ def home(request):
                     location_totaltime=location_end-location_start
                 # locay=str(city+region+country+"from geoapify"
                 if latitude is  None and longitude is  None:
-                    # url="https://ipinfo.io/{0}?token={1}".format(request.client_ip,token) 
-                    url="https://ipinfo.io/{0}?token={1}".format("34.82.78.16",token) 
+                    url="https://ipinfo.io/{0}?token={1}".format(request.client_ip,token) 
+                    # url="https://ipinfo.io/{0}?token={1}".format("34.82.78.16",token) 
                     print(url)
                     res=requests.get(url).json()
                     print(res)
@@ -258,7 +258,7 @@ def home(request):
                     # print(ip_address)
                 login_status='NFE'
                 screen_size=str(screen_res_height)+":"+str(screen_res_width)
-                data=data_collected(Uid=uid,prev_date=last_login_date,login_count=instance_count,login_status=login_status,start_week=day_name,screen_size=screen_size,Os=OS,system_type=device_type_final,userid=username,latlong=lat_long,browser=browser_final,location=location_final,latitude=latitude,longitude=longitude,webgl=webgl,canvas=canvas_hash,ip=request.client_ip,language=lang,date=naive_datetime.date(),login_time=str(parsed_time.time()),start_date=str(parsed_time.date()),time_zone=time_zone,rtt=overall_totaltime)
+                data=data_collected(Uid=uid,prev_date=last_login_date,login_count=instance_count,login_status=login_status,start_week=day_name,screen_size=screen_size,Os=OS,system_type=device_type_final,userid=username,latlong=lat_long,browser=browser_final,location=location_final,latitude=latitude,longitude=longitude,webgl=webgl,canvas=canvas_hash,ip=request.client_ip,language=lang,login_time=str(parsed_time.time()),start_date=str(parsed_time.date()),time_zone=time_zone,rtt=overall_totaltime)
                 data.save()
     return render(request, 'users/home.html')
 
