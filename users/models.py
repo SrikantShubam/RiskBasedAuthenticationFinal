@@ -1,11 +1,8 @@
 from django.db import models
 
 from django.contrib.auth.models import AbstractUser
-# import datetime
+from django.utils import timezone
 
-# time_string = "2023-07-03 13:18:21.560+0530"
-# parsed_time = datetime.datetime.strptime(time_string, "%Y-%m-%d %H:%M:%S.%f%z")
-# formatted_date = parsed_time.date().isoformat()
 
      
 
@@ -62,3 +59,6 @@ class data_collected(models.Model):
     screen_size=models.CharField(max_length=20,default=0)
     start_week=models.CharField(max_length=200,default=0,blank=True,null=True)
     login_status=models.CharField(max_length=200,default='E',blank=True,null=True)
+    login_count=models.IntegerField()
+    prev_date =  models.DateField()
+

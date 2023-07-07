@@ -15,7 +15,22 @@ from django.utils.timezone import make_aware
 import requests
 import json
 from django.views.decorators.csrf import csrf_exempt,csrf_protect
+from django.db import connection
 
+def count_username_instances(username):
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT COUNT(*) FROM users_data_collected WHERE userid = %s", [username])
+        count = cursor.fetchone()[0]
+    return count
+def get_last_login_date(userid):
+    with connection.cursor() as cursor:
+        cursor.execute(
+            "SELECT start_date FROM users_data_collected WHERE userid = %s ORDER BY id DESC LIMIT 1",
+            [userid]
+        )
+        row = cursor.fetchone()
+        last_login_time = row[0] if row else None
+    return last_login_time
 @csrf_exempt
 def home(request):
   
@@ -34,6 +49,10 @@ def home(request):
             user_start=time.time()
             print("User: ", request.user)
             username=request.user
+            instance_count = int(count_username_instances(username))+1
+            print("total instance of the user is ",instance_count)
+            last_login_date = get_last_login_date(username)
+            print("the last login date",last_login_date)
             # uid=username+"UID"+current_time
 
             # print("uidasdasdasdasdasd",uid)
@@ -172,8 +191,8 @@ def home(request):
                 print('screen_res_total_time:', screen_res_total_time)
                 print('latitude:', latitude)
                 print('longitude:', longitude)
-                time_url="https://api.ipgeolocation.io/ipgeo?apiKey={0}&ip={1}".format(time_api_key,request.client_ip)
-                # time_url="https://api.ipgeolocation.io/ipgeo?apiKey={0}&ip={1}".format(time_api_key,"122.180.223.178")
+                # time_url="https://api.ipgeolocation.io/ipgeo?apiKey={0}&ip={1}".format(time_api_key,request.client_ip)
+                time_url="https://api.ipgeolocation.io/ipgeo?apiKey={0}&ip={1}".format(time_api_key,"122.180.223.178")
                 res=requests.get(time_url).json()
                 print(time_url)
                 current_time = res['time_zone']['current_time']
@@ -239,7 +258,7 @@ def home(request):
                     # print(ip_address)
                 login_status='NFE'
                 screen_size=str(screen_res_height)+":"+str(screen_res_width)
-                data=data_collected(Uid=uid,login_status=login_status,start_week=day_name,screen_size=screen_size,Os=OS,system_type=device_type_final,userid=username,latlong=lat_long,browser=browser_final,location=location_final,latitude=latitude,longitude=longitude,webgl=webgl,canvas=canvas_hash,ip=request.client_ip,language=lang,date=naive_datetime.date(),login_time=str(parsed_time.time()),start_date=str(parsed_time.date()),time_zone=time_zone,rtt=overall_totaltime)
+                data=data_collected(Uid=uid,prev_date=last_login_date,login_count=instance_count,login_status=login_status,start_week=day_name,screen_size=screen_size,Os=OS,system_type=device_type_final,userid=username,latlong=lat_long,browser=browser_final,location=location_final,latitude=latitude,longitude=longitude,webgl=webgl,canvas=canvas_hash,ip=request.client_ip,language=lang,date=naive_datetime.date(),login_time=str(parsed_time.time()),start_date=str(parsed_time.date()),time_zone=time_zone,rtt=overall_totaltime)
                 data.save()
     return render(request, 'users/home.html')
 
