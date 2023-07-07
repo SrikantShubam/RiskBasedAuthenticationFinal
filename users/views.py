@@ -235,7 +235,7 @@ def home(request):
                     region = res['region']
                     country = res['country']
                     lat_long = res['loc']
-                    location_final=str(res['country'])+str(res['region'])+str(res['city'])
+                    location_final=str(res['country'])+"-"+str(res['region'])+"-"+str(res['city'])
                     time_zone = res['timezone']
                     location_totaltime=0 
                     # "ip": ip_address,
@@ -253,8 +253,8 @@ def home(request):
                 overall_totaltime=total_end-total_start
                 # csrf_token = csrf.get_token(request)
                     # print(request.META)
-                browser_final=str(browser_ua.family)+str(browser_ua.version_string)
-                OS=str(system_ua.family)+str(system_ua.version_string)
+                browser_final=str(browser_ua.family)+"-"+str(browser_ua.version_string)
+                OS=str(system_ua.family)+"-"+str(system_ua.version_string)
                     # print(ip_address)
                 login_status='NFE'
                 screen_size=str(screen_res_height)+":"+str(screen_res_width)
