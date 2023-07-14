@@ -16,6 +16,7 @@ import requests
 import json
 from django.views.decorators.csrf import csrf_exempt,csrf_protect
 from django.db import connection
+from django.contrib.auth import logout
 
 def count_username_instances(username):
     with connection.cursor() as cursor:
@@ -31,6 +32,47 @@ def get_last_login_date(userid):
         row = cursor.fetchone()
         last_login_time = row[0] if row else None
     return last_login_time
+
+from django.contrib.auth.views import LogoutView
+
+class CustomLogoutView(LogoutView):
+    def dispatch(self, request, *args, **kwargs):
+        # Print a statement when the user logs out
+        print("User logged out:", request.user.username)
+        uid = request.session.get('uid')
+        print("UID value:", uid)
+        del request.session['uid']
+        current_datetime = datetime.datetime.now()
+        end_date = current_datetime.date()
+        print("the end date is ",end_date)
+        obj = data_collected.objects.get(UID=uid)
+
+        # Update the end_date field with the new value
+        obj.end_date = end_date
+
+        # Save the changes to the database
+        obj.save()
+        print("NEW STUFF------------")
+        second_last_instance = data_collected.objects.filter(userid=request.user.username).order_by('-id')[1]
+        second_last_instance.prev_date=end_date
+        second_last_instance.save()
+        obj = data_collected.objects.get(UID=uid)
+        # obj.period=int(obj.prev_date-end_date)
+        date_difference = (obj.prev_date - end_date).days
+        # int(date_difference)
+        print(date_difference)
+        # print(type(int(date_difference)))
+
+        obj.period=date_difference
+
+        obj.save()
+        # if len(instances) >= 2:
+        #     second_last_instance = instances[1]  # Retrieve the second last instance
+        #     end_date = second_last_instance.end_date 
+        # # end_date = last_instance.end_date
+        #     print(second_last_instance.login_count)
+        print(end_date)
+        return super().dispatch(request, *args, **kwargs)
 @csrf_exempt
 def home(request):
   
@@ -43,7 +85,8 @@ def home(request):
             date_stamp=str(make_aware(obj11).day)+"D"+str(make_aware(obj11).month)+"M"+str(make_aware(obj11).year)+"Y"
             print("asdasdasdasdsadasdsa",date_stamp)
             uid=str(request.user)+"UID"+time_stamp+"DD"+date_stamp
-            
+            print(uid)
+            request.session['uid'] = uid
             total_start=time.time()
             #username start--------------------
             user_start=time.time()
@@ -258,7 +301,7 @@ def home(request):
                     # print(ip_address)
                 login_status='NFE'
                 screen_size=str(screen_res_height)+":"+str(screen_res_width)
-                data=data_collected(Uid=uid,prev_date=last_login_date,login_count=instance_count,login_status=login_status,start_week=day_name,screen_size=screen_size,Os=OS,system_type=device_type_final,userid=username,latlong=lat_long,browser=browser_final,location=location_final,latitude=latitude,longitude=longitude,webgl=webgl,canvas=canvas_hash,ip=request.client_ip,language=lang,login_time=str(parsed_time.time()),start_date=str(parsed_time.date()),time_zone=time_zone,rtt=overall_totaltime)
+                data=data_collected(UID=uid,prev_date=last_login_date,login_count=instance_count,login_status=login_status,start_week=day_name,screen_size=screen_size,Os=OS,system_type=device_type_final,userid=username,latlong=lat_long,browser=browser_final,location=location_final,latitude=latitude,longitude=longitude,webgl=webgl,canvas=canvas_hash,ip=request.client_ip,language=lang,login_time=str(parsed_time.time()),start_date=str(parsed_time.date()),time_zone=time_zone,rtt=overall_totaltime)
                 data.save()
     return render(request, 'users/home.html')
 

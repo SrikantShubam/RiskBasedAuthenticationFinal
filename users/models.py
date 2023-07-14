@@ -2,13 +2,14 @@ from django.db import models
 
 from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
+import datetime
 
 
      
 
 
 class data_collected(models.Model):
-    Uid=models.CharField(max_length=400,default="Id not given")
+   
     userid=models.CharField(max_length=400,null=True,blank=True,default="something")
 
     # system_fonts=models.CharField(max_length=10000,default='Arial',null=True,blank=True)
@@ -46,7 +47,7 @@ class data_collected(models.Model):
 
     #--- > the final list 
     ip=models.CharField(max_length=40,null=True,blank=True,default="something")
-  
+    UID=models.CharField(max_length=400,default="Id not given")
     time_zone=models.CharField(max_length=40,default='UTC',null=True,blank=True)
     language=models.CharField(max_length=40,default='en-US',null=True,blank=True)
     latlong = models.CharField(max_length=200,default=0,blank=True,null=True)
@@ -56,10 +57,12 @@ class data_collected(models.Model):
     system_type=models.CharField(max_length=200,default=0,blank=True,null=True)
     rtt=models.CharField(max_length=200,default=0,blank=True,null=True)
     login_time=models.TimeField(default=0)
-    start_date =  models.DateField()
+    start_date =  models.DateField(null=True,default=datetime.date.today)
     screen_size=models.CharField(max_length=20,default=0)
     start_week=models.CharField(max_length=200,default=0,blank=True,null=True)
     login_status=models.CharField(max_length=200,default='E',blank=True,null=True)
     login_count=models.IntegerField()
-    prev_date=models.DateField()
+    prev_date=models.DateField(null=True,default=datetime.date.today)
+    end_date=models.DateField(null=True,default=datetime.date.today)
+    period=models.IntegerField(null=True)
 
