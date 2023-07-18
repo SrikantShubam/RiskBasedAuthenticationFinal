@@ -88,19 +88,30 @@ WSGI_APPLICATION = 'demo.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#          'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'login_final',
+#         'USER': 'root',
+#         'PASSWORD':'root',
+#         'HOST':'localhost',
+#         'PORT':'3306',
+#           'OPTIONS': {
+#             'charset': 'utf8mb4',
+#         },
+#     }
+# }
 DATABASES = {
     'default': {
-         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'login_final',
-        'USER': 'root',
-        'PASSWORD':'root',
-        'HOST':'localhost',
-        'PORT':'3306',
-          'OPTIONS': {
-            'charset': 'utf8mb4',
-        },
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'db_iee',  # The name of your PostgreSQL database
+        'USER': 'root',    # The PostgreSQL username
+        'PASSWORD': 'w2Ol2HodHNiS8v3LSyZwOZ0w3HXeQspx',  # The PostgreSQL password
+        'HOST': 'dpg-cir6madgkuvqadovbdrg-a.singapore-postgres.render.com',  # The external host provided by Render
+        'PORT': '5432',    # The PostgreSQL port number (default is usually 5432)
     }
 }
+
 
 
 # Password validation
